@@ -1,14 +1,21 @@
 import styles from '../styles/styles.module.css';
 import { useProduct } from '../hooks/useProduct';
-import { createContext } from 'react';
-import { ProductContextProps, ProductCardprops } from '../interfaces/interfaces';
+import { createContext, ReactElement } from 'react';
+import { ProductContextProps, Product } from '../interfaces/interfaces';
 
 
 
-export const ProductContext = createContext({} as ProductContextProps);// Creamos el contexto con un valor por defecto
+export const ProductContext = createContext({} as ProductContextProps); // Creamos el contexto con un valor por defecto
 const { Provider } = ProductContext;
 
-const ProductCard = ({children, product}:ProductCardprops) => {
+export interface Props {
+    product: Product
+    children?: ReactElement | ReactElement[] //children es opcional, puede ser un elemento o un arreglo de elementos
+    className?: string //Clase opcional para el componente
+    style?: React.CSSProperties //Estilo opcional para el componente
+}
+
+export const ProductCard = ({children, product, className, style}:Props) => {
 
     const { counter, increaseBy } = useProduct(); // Custom hook de poder aumentar y disminuir el contador del producto
     //Aqui lo hago con if, pero se puede hacer con una sola linea como arriba
@@ -27,7 +34,10 @@ const ProductCard = ({children, product}:ProductCardprops) => {
             counter, 
             product
             }}>
-            <div className={styles.productCard}>
+            <div 
+                className={`${styles.productCard} ${className}`} 
+                style={style}
+                >
                 {children}
                 {/*<img className={ styles.productImg } src="/coffee-mug.png" alt="Coffee Mug" />*/}
                 {/* <ProductImage/>
@@ -43,5 +53,3 @@ const ProductCard = ({children, product}:ProductCardprops) => {
 
     )
 }
-
-export default ProductCard; // Exportamos el componente por defecto
