@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { onChanceArgs, Product } from "../interfaces/interfaces";
 
 interface UseProductProps {
@@ -9,14 +9,8 @@ interface UseProductProps {
 
 export const useProduct = ({onChange, product, value=0}: UseProductProps) => {
     const [ counter, setCounter ] = useState(value);
-    const isControlled = useRef(!!onChange); // Verifica si el componente es controlado por onChange
 
-    const increaseBy = ( value: number ) => {
-        if( isControlled.current && onChange){
-            console.log({value, counter});
-        return onChange({ count: value, product })// Si es controlado, retornamos el onChange con el valor inicial
-        
-    }
+    const increaseBy = ( value: number ) => {     
         const newValue =Math.max( counter + value, 0)
         setCounter( newValue); //El Math.Max toma el valor maximo entre el valor actual del counter y el 0
         onChange && onChange({count: newValue, product}); // Si onChange existe, lo llamamos con el nuevo valor del contador y el producto
