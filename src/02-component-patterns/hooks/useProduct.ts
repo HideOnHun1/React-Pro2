@@ -1,11 +1,29 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { onChanceArgs, Product } from "../interfaces/interfaces";
 
-export const useProduct = () => {
-    const [ counter, setCounter ] = useState(0);
+interface UseProductProps {
+    product: Product;
+    onChange?: (args: onChanceArgs) => void; // Callback para cuando el contador cambia
+    value?: number
+}
+
+export const useProduct = ({onChange, product, value=0}: UseProductProps) => {
+    const [ counter, setCounter ] = useState(value);
+    const isControlled = useRef(!!onChange); // Verifica si el componente es controlado por onChange
 
     const increaseBy = ( value: number ) => {
-        setCounter( prev => Math.max( prev + value, 0)); //El Math.Max toma el valor maximo entre el valor actual del counter y el 0
+        if( isControlled.current && onChange){
+            console.log({value, counter});
+        return onChange({ count: value, product })// Si es controlado, retornamos el onChange con el valor inicial
+        
     }
+        const newValue =Math.max( counter + value, 0)
+        setCounter( newValue); //El Math.Max toma el valor maximo entre el valor actual del counter y el 0
+        onChange && onChange({count: newValue, product}); // Si onChange existe, lo llamamos con el nuevo valor del contador y el producto
+    }
+    useEffect(() => {
+        setCounter(value); // Si el valor inicial cambia, actualizamos el contador del carrito lateral
+    }, [value]);
     return {
         counter,
         increaseBy

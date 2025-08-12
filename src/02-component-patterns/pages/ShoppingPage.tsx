@@ -1,14 +1,15 @@
 import { ProductButtons, ProductCard, ProductImage, ProductTitle } from "../components/index"
 import '../styles/custom-styles.css'; // Importamos los estilos personalizados
-const product ={
-    id: "1", //ID del producto
-    title: "Coffee Mug - Card", //Nombre del producto
-    img: '/coffee-mug.png' //Imagen del producto
-}
+import { products } from "../data/products";
+import { useShopping } from "../hooks/useShopping";
+
+
 
 export const ShoppingPage = () => {
+    //Los Hooks solo se pueden usar dentro de un componente de React
+    const { onProductCounterChange, shoppingCart } =useShopping();
     return (
-        <div  >
+        <div>
             <h1>Shopping Store</h1>
             <hr/>
             <div style={{
@@ -16,8 +17,61 @@ export const ShoppingPage = () => {
                 flexDirection: 'row',
                 flexWrap: 'wrap',
             }}>
+
+                {
+                    products.map( product => (
+                        <ProductCard 
+                            key={ product.id }
+                            product={ product }
+                            className="bg-dark text-white"
+                            onChange={ onProductCounterChange }
+                            value={ shoppingCart[product.id]?.count || 0 } // Pasamos el valor del contador al ProductCard
+                        >
+                            <ProductImage className="custom-image" style={{ boxShadow: '10px 10px 10px rgba(0,0,0,0.2)' }} />
+                            <ProductTitle className="text-bold" />
+                            <ProductButtons className="custom-buttons" />
+                        </ProductCard>
+                    ))
+                }
+
+                <div className="shopping-cart">
+
+                {
+                    Object.entries( shoppingCart ).map( ([ key, product ]) => (
+                        <ProductCard 
+                            key={ key }
+                            product={ product }
+                            className="bg-dark text-white"
+                            style={{ width: '100px' }}
+                            onChange={ onProductCounterChange }
+                            value={product.count} // Pasamos el valor del contador al ProductCard
+                        >
+                            <ProductImage className="custom-image" style={{ boxShadow: '10px 10px 10px rgba(0,0,0,0.2)' }} />
+                            <ProductButtons 
+                                className="custom-buttons"
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }}
+                            />
+                        </ProductCard>
+                    ))
+                }
+
+                    
+            </div>
+
+                
+
+
+
+
+
+
+                {/* //Haciendolo con props */}
+
                 {/* Una una tecnica diferente de hacerlo */}
-                <ProductCard
+                {/* <ProductCard
                     product={product}
                     className="bg-dark text-white"
                     >
@@ -27,25 +81,26 @@ export const ShoppingPage = () => {
                     className="text-bold" 
                     />
                     <ProductButtons className="custom-button"/>
-                </ProductCard>
+                </ProductCard> */}
+                    {/* //Haciendolo con style */}
 
-                <ProductCard 
-                    product={product}
+                {/* <ProductCard 
+                    product={product2}
                     className="bg-dark text-white"
                     >
                     <ProductCard.Image 
                     className="custom-image"
                     />
                     <ProductCard.Title 
-                    title={product.title}
+                    title={product2.title}
                     className="text-bold"
                     />
                     <ProductCard.Buttons 
                     className="custom-button"
                     />
-                </ProductCard> 
+                </ProductCard>  */}
 
-                <ProductCard 
+                {/* <ProductCard 
                     product={product}
                     style={{
                         backgroundColor: 'lightblue',
@@ -59,10 +114,7 @@ export const ShoppingPage = () => {
                         display: 'flex',
                         justifyContent: 'end',
                     }} />
-                </ProductCard>
-
-                
-
+                </ProductCard> */}
             </div>
         </div>
 

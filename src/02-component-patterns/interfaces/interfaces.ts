@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { Props as ProductCardProps } from "../components/ProductCard";
 import { ProductTitleProps } from "../components/ProductTitle";
 import { ProductButtonsProps } from "../components/ProductButtons";
@@ -21,4 +21,13 @@ export interface ProductCardHOCProps {
     Image: (Props: ProductImageProps) => ReactElement;
     Title: ( Props: ProductTitleProps) => ReactElement;
     Buttons: (Props:ProductButtonsProps) => ReactElement;
+}
+
+export interface onChanceArgs {
+    product: Product;
+    count: number;
+}
+
+export interface ProductInCard extends Product {
+    count: number
 }
